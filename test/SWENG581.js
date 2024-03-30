@@ -126,4 +126,47 @@ describe('SWENG581 tests', function() {
       return eq(R.dropLast(null, 'string'), 'string');
     });
   });
+
+  describe('SWENG581 concat graph tests', function() {
+    it('handles arrays for a and b inputs', function() {
+      return eq(R.concat([1], [2,3]), [1,2,3]);
+    });
+
+    it('throws with input types array and string', function() {
+      assert.throws(function() {R.concat([1], 'test');}, TypeError);
+    });
+
+    it('handles stirngs for a and b inputs', function() {
+      return eq(R.concat('test', 'ing'), 'testing');
+    });
+
+    it('throws with input types array and string', function() {
+      assert.throws(function() {R.concat('test', [1]);}, TypeError);
+    });
+
+    it('handles fantasy-land/concat inputs', function() {
+      const mockConcat = {
+        ['fantasy-land/concat'](value) { return 'fantasy-land/concat called ' + value; }
+      };
+      return eq(R.concat(mockConcat, 'with test'), 'fantasy-land/concat called with test');
+    });
+
+    it('handles fantasy-land/concat inputs', function() {
+      const mockConcat = {
+        ['fantasy-land/concat'](value) { return 'fantasy-land/concat called ' + value; }
+      };
+      return eq(R.concat(mockConcat, [2,3,4]), 'fantasy-land/concat called 2,3,4');
+    });
+
+    it('handles functions that support .concat', function() {
+      const testInput = {
+        concat: function(someValue) { return 'Something ' + someValue; }
+      };
+      return eq(R.concat(testInput, 'worked!'), 'Something worked!');
+    });
+
+    it('throws with a null first arg', function() {
+      assert.throws(function() {R.concat(null, [1]);}, TypeError);
+    });
+  });
 });
